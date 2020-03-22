@@ -13,6 +13,7 @@ using ShopApp.Business.Concrete;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.DataAccess.Concrete.EfCore;
 using ShopApp.DataAccess.Concrete.Memory;
+using ShopApp.WebUI.Middlewares;
 
 namespace ShopApp.WebUI
 {
@@ -48,6 +49,12 @@ namespace ShopApp.WebUI
 
                 SeedDatabase.Seed();
             }
+
+            // root klasorunu disariya acar
+            app.UseStaticFiles();
+
+            // extra klasorleri disari acmak icin
+            app.CustomStaticFiles();
 
             app.UseRouting();
 
