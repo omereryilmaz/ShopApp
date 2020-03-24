@@ -12,7 +12,6 @@ using ShopApp.Business.Abstract;
 using ShopApp.Business.Concrete;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.DataAccess.Concrete.EfCore;
-using ShopApp.DataAccess.Concrete.Memory;
 using ShopApp.WebUI.Middlewares;
 
 namespace ShopApp.WebUI
@@ -60,9 +59,15 @@ namespace ShopApp.WebUI
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapControllerRoute(
+                   name: "products",
+                   pattern: "products/{category?}",
+                   defaults: new {controller = "Shop", action = "List"}
+                );
+
+                routes.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
