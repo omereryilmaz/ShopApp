@@ -33,9 +33,11 @@ namespace ShopApp.WebUI
             services.AddControllersWithViews();          
 
             services.AddScoped<IProductDal, EfCoreProductDal>();
+            services.AddScoped<ICategoryDal, EfCoreCategoryDal>();
 
             // IProductService istenirse ProductManager gonderilecek
             services.AddScoped<IProductService, ProductManager>();
+            services.AddScoped<ICategoryService, CategoryManager>();
 
         }
 

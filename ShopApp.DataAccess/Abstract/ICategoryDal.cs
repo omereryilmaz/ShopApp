@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ShopApp.DataAccess.Abstract
 {
-    interface ICategoryDal : IRepository<Category>
+    public interface ICategoryDal : IRepository<Category>
     {
         
     }
