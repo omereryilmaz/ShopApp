@@ -25,6 +25,12 @@ namespace ShopApp.WebUI.Controllers
             const int pageSize = 3;
             return View(new ProductListModel()
             {
+                PageInfo = new PageInfo() { 
+                    TotalItems = _productService.GetCountByCategory(category),
+                    CurrentPage = page,
+                    ItemPerPage = pageSize,
+                    CurrentCategory = category
+                },
                 Products = _productService.GetProductsByCategory(category, page, pageSize)
             });
         }
