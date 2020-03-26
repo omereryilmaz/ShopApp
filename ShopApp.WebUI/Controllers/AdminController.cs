@@ -20,7 +20,7 @@ namespace ShopApp.WebUI.Controllers
             _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public IActionResult ProductList()
         {
             return View(new ProductListModel()
             {
@@ -29,13 +29,13 @@ namespace ShopApp.WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateProduct()
+        public IActionResult ProductCreate()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(ProductModel model)
+        public IActionResult ProductCreate(ProductModel model)
         {
             var entity = new Product()
             {
@@ -47,10 +47,10 @@ namespace ShopApp.WebUI.Controllers
 
             _productService.Create(entity);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductList");
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult ProductEdit(int? id)
         {
             if (id == null)
             {
@@ -73,7 +73,7 @@ namespace ShopApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ProductModel model)
+        public IActionResult ProductEdit(ProductModel model)
         {
             var entity = _productService.GetById(model.Id);
             if (entity == null)
@@ -88,18 +88,18 @@ namespace ShopApp.WebUI.Controllers
 
             _productService.Update(entity);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductList");
         }
 
         [HttpPost]
-        public ActionResult Delete(int productId)
+        public ActionResult ProductDelete(int productId)
         {
             var entity = _productService.GetById(productId);
             if (entity != null)
             {
                 _productService.Delete(entity);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductList");
         }
 
         public IActionResult CategoryList()
