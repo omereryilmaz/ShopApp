@@ -130,11 +130,12 @@ namespace ShopApp.WebUI.Controllers
         [HttpGet]
         public IActionResult CategoryEdit(int id)
         {
-            var entity = _categoryService.GetById(id);
+            var entity = _categoryService.GetByIdWithProducts(id);
 
             return View(new CategoryModel() { 
                 Id = entity.Id,
-                Name = entity.Name
+                Name = entity.Name,
+                Products = entity.ProductCategories.Select(p=>p.Product).ToList()
             });
         }
 

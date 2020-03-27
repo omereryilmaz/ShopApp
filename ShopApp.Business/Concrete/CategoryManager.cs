@@ -41,5 +41,10 @@ namespace ShopApp.Business.Concrete
         {
             _categoryDal.Update(entity);
         }
+
+        public Category GetByIdWithProducts(int id)
+        {
+            return _categoryDal.GetByIdWithProducts(id);
+        }
     }
 }
