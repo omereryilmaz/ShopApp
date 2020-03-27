@@ -46,5 +46,10 @@ namespace ShopApp.Business.Concrete
         {
             return _categoryDal.GetByIdWithProducts(id);
         }
+
+        public void DeleteFromCategory(int categoryId, int productId)
+        {
+            _categoryDal.DeleteFromCategory(categoryId, productId);
+        }
     }
 }
