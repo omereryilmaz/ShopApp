@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopApp.Business.Abstract;
 using ShopApp.Entities;
@@ -88,22 +92,61 @@ namespace ShopApp.WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProductEdit(ProductModel model, int[] categoryIds)
+        public async Task<IActionResult> ProductEdit(ProductModel model, int[] categoryIds, IFormFile file)
         {
-            var entity = _productService.GetById(model.Id);
-            if (entity == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                var entity = _productService.GetById(model.Id);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                
+                entity.Name = model.Name;
+                entity.Price = model.Price;
+                entity.Description = model.Description;
+                // entity.ImageUrl = model.ImageUrl;
+
+                if (file != null)
+                {
+                    // https://stackoverflow.com/a/47129623 kaynagindan yararlanildi.
+                    var newFileName = string.Empty;
+                    var fileName = string.Empty;
+                    string pathFile = string.Empty;                  
+
+                    //Dosya ismini alir
+                    fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');                    
+
+                    //Benzersiz dosya ismi olusturur
+                    var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                    //Dosya uzantisini alir
+                    var FileExtension = Path.GetExtension(fileName);
+
+                    // dosya ismi + dosya uzantisi birlestir
+                    newFileName = myUniqueFileName + FileExtension;
+
+                    // Combines two strings into a path.
+                    // fileName = Path.Combine(_environment.WebRootPath, "wwwroot\\img") + $@"\{newFileName}";
+
+                    // Dosyanin kopyalanacagi yer ve yeni dosya adi
+                    pathFile = "wwwroot/img/" + newFileName;
+
+                    entity.ImageUrl = newFileName;
+
+                    // Formdan gonderilen resmi (file), pathFile bilgileriyle kopyala
+                    using (var stream = new FileStream(pathFile, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+
+                _productService.Update(entity, categoryIds);
+                return RedirectToAction("ProductList");
             }
 
-            entity.Name = model.Name;
-            entity.Price = model.Price;
-            entity.Description = model.Description;
-            entity.ImageUrl = model.ImageUrl;
-
-            _productService.Update(entity, categoryIds);
-
-            return RedirectToAction("ProductList");
+            ViewBag.Categories = _categoryService.GetAll();
+            return View(model);
         }
 
         [HttpPost]
