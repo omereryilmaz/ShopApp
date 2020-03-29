@@ -10,9 +10,7 @@ namespace ShopApp.WebUI.Models
     public class ProductModel
     {
         public int Id { get; set; }
-
-        [Required(ErrorMessage ="Lütfen ürün ismi giriniz.")]
-        [StringLength(60, MinimumLength = 10, ErrorMessage ="Ürün ismi min 10 karakter max 60 karakter olmalıdır")]
+        
         public string Name { get; set; }
 
         [Required]

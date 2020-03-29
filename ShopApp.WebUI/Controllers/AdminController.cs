@@ -47,15 +47,18 @@ namespace ShopApp.WebUI.Controllers
                     Price = model.Price
                 };
 
-                _productService.Create(entity);
+                if (_productService.Create(entity))
+                {
+                    return RedirectToAction("ProductList");
+                }
 
-                return RedirectToAction("ProductList");
+                ViewBag.ErrorMessage = _productService.ErrorMessage;
+                return View(model);
             }
             else
             {
                 return View(model);
-            }
-            
+            }            
         }
 
         public IActionResult ProductEdit(int? id)
