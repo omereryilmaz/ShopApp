@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,6 +38,53 @@ namespace ShopApp.WebUI
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => {
+                // Password Ayarlari
+                // Mutlaka icerisinde sayisal deger ister
+                options.Password.RequireDigit = true;
+                // Mutlaka 1 tane kucuk karakter ister
+                options.Password.RequireLowercase = true;
+                // Mutlaka 1 tane buyuk karakter ister
+                options.Password.RequireUppercase = true;
+                // Minimum 6 karakterli
+                options.Password.RequiredLength = 6;
+
+                // 5 kere yanlis girmek hakki    
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                // 5 kere yanlis girerse kullanciyi 5dk kilitle
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                // Kilitleme islemi yeni kullanici icin de gecerli
+                options.Lockout.AllowedForNewUsers = true;
+
+                // Daha once kayitli maile tekrar izin verme
+                options.User.RequireUniqueEmail = true;
+                // Kayittan sonra maili onaylamasini zorunlu kil
+                options.SignIn.RequireConfirmedEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options => {
+                options.LoginPath = "/account/login";
+                options.LogoutPath = "/account/logout";
+                // Kullanici erisiminin olmamasının istenildiginde yonlendirir
+                options.AccessDeniedPath = "/account/accesdenied";
+
+                // Cookie suresi 60 dk olarak ayarlandi
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+
+                // true: cookie suresi bitinci login islemi gerektirir
+                // false: kullanici aktifse cookie suresini uzatir
+                options.SlidingExpiration = true;
+
+                options.Cookie = new CookieBuilder { 
+                    // sciptler ile cookie'lerin okunmasini engeller
+                    // sadece http cagrilari ile okunur
+                    HttpOnly = true,
+                    //Cookie ismi
+                    Name = ".ShopApp.Security.Cookie"
+                };
+            });
+
 
             services.AddControllersWithViews();          
 
