@@ -59,8 +59,8 @@ namespace ShopApp.WebUI
 
                 // Daha once kayitli maile tekrar izin verme
                 options.User.RequireUniqueEmail = true;
-                // Kayittan sonra maili onaylamasini zorunlu kil
-                options.SignIn.RequireConfirmedEmail = true;
+                // true: Kayittan sonra maili onaylamasini zorunlu kil
+                options.SignIn.RequireConfirmedEmail = false;
             });
 
             services.ConfigureApplicationCookie(options => {
