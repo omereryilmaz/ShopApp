@@ -95,6 +95,8 @@ namespace ShopApp.WebUI
             services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryService, CategoryManager>();
 
+            //services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
+
         }
 
     
@@ -114,9 +116,12 @@ namespace ShopApp.WebUI
             // extra klasorleri disari acmak icin
             app.CustomStaticFiles();
 
+          
+            app.UseRouting();
+
             app.UseAuthentication();
 
-            app.UseRouting();
+            app.UseAuthorization();
 
             app.UseEndpoints(routes =>
             {
@@ -142,6 +147,8 @@ namespace ShopApp.WebUI
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
 
         }
     }
