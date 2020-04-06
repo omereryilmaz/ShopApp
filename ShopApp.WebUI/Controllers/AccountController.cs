@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ShopApp.WebUI.EmailServices;
 using ShopApp.WebUI.Identity;
 using ShopApp.WebUI.Models;
 
@@ -14,11 +15,13 @@ namespace ShopApp.WebUI.Controllers
     {
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
+        private IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSender = emailSender;
         }
 
         public IActionResult Register()
@@ -52,6 +55,8 @@ namespace ShopApp.WebUI.Controllers
                     token = code
                 });
                 //send mail
+                await _emailSender.SendEmailAsync(model.Email, "Hesabinizi Onaylayin.",
+                    $"Lütfen dogrulamak icin linke <a href='http://localhost:3288{callbackUrl}'>tiklayiniz.</a>");
                 return RedirectToAction("login", "account");
             }
 
