@@ -88,5 +88,12 @@ namespace ShopApp.WebUI.Controllers
             ModelState.AddModelError("","Email ya da parola yanlis.");
             return View(model);
         }
+
+        public async Task<ActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Redirect("~/");
+        }
     }
 }
