@@ -81,7 +81,8 @@ namespace ShopApp.WebUI
                     // sadece http cagrilari ile okunur
                     HttpOnly = true,
                     //Cookie ismi
-                    Name = ".ShopApp.Security.Cookie"
+                    Name = ".ShopApp.Security.Cookie",
+                    SameSite = SameSiteMode.Strict
                 };
             });
 

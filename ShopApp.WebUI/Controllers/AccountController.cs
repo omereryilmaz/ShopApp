@@ -9,6 +9,7 @@ using ShopApp.WebUI.Models;
 
 namespace ShopApp.WebUI.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class AccountController : Controller
     {
         private UserManager<ApplicationUser> _userManager;
@@ -62,8 +63,7 @@ namespace ShopApp.WebUI.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Login(LoginModel model)
-        {
-          
+        {          
             if (!ModelState.IsValid)
             {
                 return View(model);
