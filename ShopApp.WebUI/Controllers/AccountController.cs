@@ -53,37 +53,39 @@ namespace ShopApp.WebUI.Controllers
             return View(model);
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl = null)
         {
-            return View(new LoginModel());
+            return View(new LoginModel() { 
+                ReturnUrl = ReturnUrl
+            });
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(LoginModel model, string returnUrl = null)
+        public async Task<ActionResult> Login(LoginModel model)
         {
-            // returnUrl == null ise ana dizini ata
-            returnUrl = returnUrl ?? "~/";
-
+          
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
             {
-                ModelState.AddModelError("","Bu kullanici adina ait hesap bulunmamaktadir.");
+                ModelState.AddModelError("","Bu email'e ait hesap bulunmamaktadir.");
                 return View(model);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
 
             if (result.Succeeded)
             {
-                return Redirect(returnUrl);
+                // ReturnUrl null ise anasayfaya yonlendir
+                return Redirect(model.ReturnUrl??"~/");
             }
 
+            ModelState.AddModelError("","Email ya da parola yanlis.");
             return View(model);
         }
     }
