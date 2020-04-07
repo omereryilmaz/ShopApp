@@ -14,19 +14,26 @@
                     <a href="#" class="nav-link">Cart</a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Admin" asp-action="ProductCreate" class="nav-link">Add Product</a>
+                    <a href="#" class="nav-link">Orders</a>
                 </li>
-                <li class="nav-item">
-                    <a asp-controller="Admin" asp-action="ProductList" class="nav-link">Admin Products</a>
-                </li>
-                <li class="nav-item">
-                    <a asp-controller="Admin" asp-action="CategoryCreate" class="nav-link">Add Category</a>
-                </li>
-                <li class="nav-item">
-                    <a asp-controller="Admin" asp-action="CategoryList" class="nav-link">Admin Categories</a>
-                </li>
+
+                @if (User.IsInRole("admin"))
+                {
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="ProductCreate" class="nav-link">Add Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="ProductList" class="nav-link">Admin Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="CategoryCreate" class="nav-link">Add Category</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="CategoryList" class="nav-link">Admin Categories</a>
+                    </li>
+                }
             }
-            </ul>
+        </ul>
 
         <ul class="navbar-nav ml-auto">
             @if (User.Identity.IsAuthenticated)

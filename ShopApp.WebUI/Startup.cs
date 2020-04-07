@@ -68,7 +68,7 @@ namespace ShopApp.WebUI
                 options.LoginPath = "/account/login";
                 options.LogoutPath = "/account/logout";
                 // Kullanici erisiminin olmamasının istenildiginde yonlendirir
-                options.AccessDeniedPath = "/account/accesdenied";
+                options.AccessDeniedPath = "/account/accessdenied";
 
                 // Cookie suresi 60 dk olarak ayarlandi
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
