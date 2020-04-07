@@ -171,9 +171,40 @@ namespace ShopApp.WebUI.Controllers
             return RedirectToAction("login", "account");
         }
 
-        public IActionResult ResetPassword()
+        public IActionResult ResetPassword(string userId, string token)
         {
-            return View();
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            var model = new ResetPasswordModel { Token = token };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Login","Account");
+            }
+            
+            return View(model);
         }
     }
 }

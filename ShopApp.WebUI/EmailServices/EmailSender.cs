@@ -9,6 +9,7 @@ namespace ShopApp.WebUI.EmailServices
 {
     public class EmailSender : IEmailSender
     {
+        // SendGrid API Key - Github push etmeden silinmesi gerekmektedir.
         private const string SendGridKey = "";
 
         public Task SendEmailAsync(string email, string subject, string message)
@@ -22,7 +23,7 @@ namespace ShopApp.WebUI.EmailServices
 
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("info@shopapp.com", "Shop App"),
+                From = new EmailAddress("info@shopapp.com", "ShopApp"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
